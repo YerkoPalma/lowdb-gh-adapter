@@ -22,23 +22,33 @@ function GhStorage (opts) {
 
 GhStorage.prototype.read = function () {
   var content
-  this.repo.getContents(this._branch, this._file, true, function (err, result, res) {
-    if (err) return new Promise(function (_, reject) { reject(err) })
+  return this.repo.getContents(this._branch, this._file, true, (err, result, res) => {
+    if (err && err.response.status !== 404) throw err
     content = result
-  }).then(function () {
-    return new Promise(function (resolve) {
-      resolve(content)
-    })
+  })
+  .then(response => {
+    if (content) {
+      return new Promise(resolve => resolve(content))
+    } else {
+      // if content is not present we must create the file
+      return this.repo.writeFile(this._branch, this._file, '{}', 'Update lowdb', (err, result, res) => {
+        if (err) return new Promise((_, reject) => reject(err))
+      }).then(response => {
+        return new Promise(resolve => resolve({}))
+      })
+    }
   })
 }
 
 GhStorage.prototype.write = function (data) {
-  if (data) {
-    this.repo.writeFile(this._branch, this._file, data, 'Update lowdb', function (err, result, res) {
-      if (err) return new Promise(function (_, reject) { reject(err) })
-      return new Promise(function (resolve) { resolve(result) })
-    })
-  }
+  var content
+  if (typeof data === 'object') data = JSON.stringify(data, null, 2)
+  return this.repo.writeFile(this._branch, this._file, data, 'Update lowdb', (err, result, res) => {
+    if (err) return new Promise((_, reject) => reject(err))
+    content = result
+  }).then(response => {
+    return new Promise(resolve => resolve(content))
+  }).catch(console.error)
 }
 
 module.exports = GhStorage

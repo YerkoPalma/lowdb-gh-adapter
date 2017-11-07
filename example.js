@@ -1,5 +1,7 @@
+require('dotenv').config()
+
 const low = require('lowdb')
-const GhStorage = require('lowdb/adapters/FileSync')
+const GhStorage = require('.')
 
 const adapter = new GhStorage({
   file: 'db.json',
@@ -7,19 +9,21 @@ const adapter = new GhStorage({
   user: 'YerkoPalma',
   token: process.env.TOKEN
 })
-const db = low(adapter)
-
-// Set some defaults
-db.defaults({ posts: [], user: {} })
-  .write()
-  .then(() => {
-    // Add a post
-    db.get('posts')
-      .push({ id: 1, title: 'lowdb is awesome'})
+low(adapter)
+  .then(db => {
+    // Set some defaults
+    return db.defaults({ posts: [], user: {} })
       .write()
       .then(() => {
-        // Set a user using Lodash shorthand syntax
-        db.set('user.name', 'yerkopalma')
+        // Add a post
+        db.get('posts')
+          .push({ id: 1, title: 'lowdb is awesome'})
           .write()
-      })
+          .then(() => {
+            // Set a user using Lodash shorthand syntax
+            db.set('user.name', 'yerkopalma')
+              .write().catch(console.error)
+          }).catch(console.error)
+      }).catch(console.error)
   })
+  .catch(err => console.error(err))

@@ -4,6 +4,7 @@
   "description": "Set your github repo as a backend for your lowdb instance",
   "main": "index.js",
   "scripts": {
+    "start": "node example.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,5 +13,9 @@
   "dependencies": {
     "github-api": "^3.0.0",
     "nanoassert": "^1.1.0"
+  },
+  "devDependencies": {
+    "dotenv": "^4.0.0",
+    "lowdb": "^1.0.0"
   }
 }
