@@ -7,7 +7,8 @@ const adapter = new GhStorage({
   file: 'db.json',
   repo: 'lowdb-gh-adapter',
   user: 'YerkoPalma',
-  token: process.env.TOKEN
+  token: process.env.TOKEN,
+  branch: 'db'
 })
 low(adapter)
   .then(db => {

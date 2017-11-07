@@ -32,7 +32,13 @@ GhStorage.prototype.read = function () {
     } else {
       // if content is not present we must create the file
       return this.repo.writeFile(this._branch, this._file, '{}', 'Update lowdb', (err, result, res) => {
-        if (err) return new Promise((_, reject) => reject(err))
+        if (err && err.response.status !== 404) throw err
+        // if we get again a 404, then it is highly possible that the branch doesn't exist
+        // so, attempt to create it
+        if (err.response.status === 404) {
+          // just return it, anyway we are going to send the default empty object
+          return this.repo.createBranch('master', this._branch)
+        }
       }).then(response => {
         return new Promise(resolve => resolve({}))
       })
@@ -48,7 +54,7 @@ GhStorage.prototype.write = function (data) {
     content = result
   }).then(response => {
     return new Promise(resolve => resolve(content))
-  }).catch(console.error)
+  })
 }
 
 module.exports = GhStorage
