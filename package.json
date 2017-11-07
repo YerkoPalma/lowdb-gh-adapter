@@ -1,0 +1,16 @@
+{
+  "name": "lowdb-gh-adapter",
+  "version": "1.0.0",
+  "description": "Set your github repo as a backend for your lowdb instance",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "github-api": "^3.0.0",
+    "nanoassert": "^1.1.0"
+  }
+}

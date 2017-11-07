@@ -1,0 +1,1 @@
+# lowdb-gh-adapter
