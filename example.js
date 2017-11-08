@@ -19,7 +19,7 @@ low(adapter)
       .then(() => {
         // Add a post
         db.get('posts')
-          .push({ id: 1, title: 'lowdb is awesome'})
+          .push({ id: 1, title: 'lowdb is awesome' })
           .write()
           .then(() => {
             // Set a user using Lodash shorthand syntax

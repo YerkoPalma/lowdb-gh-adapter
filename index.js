@@ -50,7 +50,7 @@ GhStorage.prototype.write = function (data) {
   var content
   if (typeof data === 'object') data = JSON.stringify(data, null, 2)
   return this.repo.writeFile(this._branch, this._file, data, 'Update lowdb', (err, result, res) => {
-    if (err) return new Promise((_, reject) => reject(err))
+    if (err) return new Promise((resolve, reject) => reject(err))
     content = result
   }).then(response => {
     return new Promise(resolve => resolve(content))
