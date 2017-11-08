@@ -3,13 +3,14 @@ require('dotenv').config()
 const low = require('lowdb')
 const GhStorage = require('.')
 
-const adapter = new GhStorage({
+const adapter = GhStorage({
   file: 'db.json',
   repo: 'lowdb-gh-adapter',
   user: 'YerkoPalma',
   token: process.env.TOKEN,
   branch: 'db'
 })
+
 low(adapter)
   .then(db => {
     // Set some defaults
