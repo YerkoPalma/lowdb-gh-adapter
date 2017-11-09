@@ -31,7 +31,7 @@ GhStorage.prototype.read = function () {
       return new Promise(resolve => resolve(content))
     } else {
       // if content is not present we must create the file
-      return this.repo.writeFile(this._branch, this._file, '{}', 'Update lowdb', (err, result, res) => {
+      return this.repo.writeFile(this._branch, this._file, '{}', '[skip ci] Update lowdb', (err, result, res) => {
         if (err && err.response.status !== 404) throw err
         // if we get again a 404, then it is highly possible that the branch doesn't exist
         // so, attempt to create it
@@ -49,7 +49,7 @@ GhStorage.prototype.read = function () {
 GhStorage.prototype.write = function (data) {
   var content
   if (typeof data === 'object') data = JSON.stringify(data, null, 2)
-  return this.repo.writeFile(this._branch, this._file, data, 'Update lowdb', (err, result, res) => {
+  return this.repo.writeFile(this._branch, this._file, data, '[skip ci] Update lowdb', (err, result, res) => {
     if (err) return new Promise((resolve, reject) => reject(err))
     content = result
   }).then(response => {
