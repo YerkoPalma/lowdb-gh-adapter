@@ -1,6 +1,6 @@
 {
   "name": "lowdb-gh-adapter",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Set your github repo as a backend for your lowdb instance",
   "main": "index.js",
   "scripts": {
