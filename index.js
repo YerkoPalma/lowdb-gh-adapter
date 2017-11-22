@@ -12,6 +12,8 @@ function GhStorage (opts) {
   this._file = opts.file
   this._repo = opts.repo
   this._user = opts.user
+  this._name = opts.name
+  this._mail = opts.mail
 
   // optional
   this._branch = opts.branch || 'master'
@@ -30,8 +32,11 @@ GhStorage.prototype.read = function () {
     if (content) {
       return new Promise(resolve => resolve(content))
     } else {
+      var opts = this._name && this._mail
+                ? { committer: { name: this._name, mail: this._mail } }
+                : {}
       // if content is not present we must create the file
-      return this.repo.writeFile(this._branch, this._file, '{}', '[skip ci] Update lowdb', (err, result, res) => {
+      return this.repo.writeFile(this._branch, this._file, '{}', '[skip ci] Update lowdb', opts, (err, result, res) => {
         if (err && err.response.status !== 404) throw err
         // if we get again a 404, then it is highly possible that the branch doesn't exist
         // so, attempt to create it
@@ -49,7 +54,10 @@ GhStorage.prototype.read = function () {
 GhStorage.prototype.write = function (data) {
   var content
   if (typeof data === 'object') data = JSON.stringify(data, null, 2)
-  return this.repo.writeFile(this._branch, this._file, data, '[skip ci] Update lowdb', (err, result, res) => {
+  var opts = this._name && this._mail
+            ? { committer: { name: this._name, mail: this._mail } }
+            : {}
+  return this.repo.writeFile(this._branch, this._file, data, '[skip ci] Update lowdb', opts, (err, result, res) => {
     if (err) return new Promise((resolve, reject) => reject(err))
     content = result
   }).then(response => {
